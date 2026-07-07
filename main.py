@@ -1,32 +1,35 @@
 import customtkinter as ctk
 
+from database.database import (
+    create_tables,
+    insert_default_users
+)
 
-# Application window
+from ui.login import LoginPage
+
+
+
+create_tables()
+
+insert_default_users()
+
+
+
 app = ctk.CTk()
 
-app.title("VisionX - AI Smart Campus System")
 
-app.geometry("900x600")
-
-
-# Main title
-title = ctk.CTkLabel(
-    app,
-    text="VisionX AI Smart Campus System",
-    font=("Arial", 30)
+app.title(
+    "VisionX AI Smart Campus System"
 )
 
-title.pack(pady=50)
 
-
-# Start button
-button = ctk.CTkButton(
-    app,
-    text="Start System"
+app.geometry(
+    "900x600"
 )
 
-button.pack(pady=20)
+
+login = LoginPage(app)
 
 
-# Run application
+
 app.mainloop()
