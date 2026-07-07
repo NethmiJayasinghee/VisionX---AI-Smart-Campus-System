@@ -1,18 +1,33 @@
 import customtkinter as ctk
 
+
 from database.database import (
     create_tables,
-    insert_default_users
+    insert_default_users,
+    create_student_table
 )
+
 
 from ui.login import LoginPage
 
 
 
+# ---------------- DATABASE INITIALIZATION ----------------
+
+# Create users table
 create_tables()
 
+
+# Insert default users
 insert_default_users()
 
+
+# Create student table
+create_student_table()
+
+
+
+# ---------------- APPLICATION WINDOW ----------------
 
 
 app = ctk.CTk()
@@ -24,12 +39,25 @@ app.title(
 
 
 app.geometry(
-    "900x600"
+    "1200x700"
 )
 
+
+# Dark mode
+ctk.set_appearance_mode("dark")
+
+
+# Theme color
+ctk.set_default_color_theme("blue")
+
+
+
+# Open Login Page
 
 login = LoginPage(app)
 
 
+
+# Run application
 
 app.mainloop()

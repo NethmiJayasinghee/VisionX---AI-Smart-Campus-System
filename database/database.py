@@ -95,3 +95,109 @@ def check_login(username, password):
 
 
     return result
+
+def create_student_table():
+
+    conn = create_connection()
+
+    cursor = conn.cursor()
+
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS students(
+
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+        student_id TEXT,
+
+        name TEXT,
+
+        email TEXT,
+
+        course TEXT,
+
+        photo TEXT
+
+    )
+    """)
+
+
+    conn.commit()
+
+    conn.close()
+
+
+
+def add_student(student_id, name, email, course, photo):
+
+    conn = create_connection()
+
+    cursor = conn.cursor()
+
+
+    cursor.execute(
+        """
+        INSERT INTO students
+        (student_id,name,email,course,photo)
+
+        VALUES(?,?,?,?,?)
+        """,
+
+        (
+            student_id,
+            name,
+            email,
+            course,
+            photo
+        )
+    )
+
+
+    conn.commit()
+
+    conn.close()
+
+
+
+def get_students():
+
+    conn = create_connection()
+
+    cursor = conn.cursor()
+
+
+    cursor.execute(
+        "SELECT * FROM students"
+    )
+
+
+    data = cursor.fetchall()
+
+
+    conn.close()
+
+
+    return data
+
+
+
+def delete_student(student_id):
+
+    conn = create_connection()
+
+    cursor = conn.cursor()
+
+
+    cursor.execute(
+        """
+        DELETE FROM students
+        WHERE id=?
+        """,
+
+        (student_id,)
+    )
+
+
+    conn.commit()
+
+    conn.close()

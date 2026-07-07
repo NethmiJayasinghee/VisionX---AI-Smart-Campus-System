@@ -1,4 +1,8 @@
 import customtkinter as ctk
+from datetime import datetime
+
+from ui.students import StudentsPage
+
 
 
 class Dashboard:
@@ -10,21 +14,27 @@ class Dashboard:
         self.role = role
 
 
-        # Clear current window
+        # Remove login page
         for widget in self.app.winfo_children():
             widget.destroy()
 
 
-        self.create_sidebar()
-        self.create_dashboard()
+        self.create_layout()
+
+        self.show_dashboard()
 
 
 
-    def create_sidebar(self):
+    # ---------------- MAIN LAYOUT ----------------
+
+    def create_layout(self):
+
+
+        # Sidebar
 
         self.sidebar = ctk.CTkFrame(
             self.app,
-            width=220,
+            width=230,
             corner_radius=0
         )
 
@@ -34,70 +44,14 @@ class Dashboard:
         )
 
 
-        logo = ctk.CTkLabel(
-            self.sidebar,
-            text="VisionX",
-            font=("Arial",32,"bold")
-        )
+        # Content Area
 
-        logo.pack(
-            pady=30
-        )
-
-
-        buttons = [
-
-            "🏠 Dashboard",
-            "👨‍🎓 Students",
-            "📷 Attendance",
-            "🛡 Security",
-            "🎤 Voice Assistant",
-            "✋ Gesture Control",
-            "📄 Reports",
-            "⚙ Settings"
-
-        ]
-
-
-        for item in buttons:
-
-
-            btn = ctk.CTkButton(
-                self.sidebar,
-                text=item,
-                width=180,
-                height=40
-            )
-
-            btn.pack(
-                pady=8
-            )
-
-
-
-        logout = ctk.CTkButton(
-            self.sidebar,
-            text="Logout",
-            fg_color="red"
-        )
-
-        logout.pack(
-            side="bottom",
-            pady=20
-        )
-
-
-
-
-    def create_dashboard(self):
-
-
-        self.main_area = ctk.CTkFrame(
+        self.content = ctk.CTkFrame(
             self.app
         )
 
-
-        self.main_area.pack(
+        self.content.pack(
+            side="right",
             expand=True,
             fill="both",
             padx=20,
@@ -105,47 +59,191 @@ class Dashboard:
         )
 
 
-        title = ctk.CTkLabel(
-            self.main_area,
-            text=f"Welcome {self.role}",
+        self.create_sidebar()
+
+
+
+    # ---------------- SIDEBAR ----------------
+
+
+    def create_sidebar(self):
+
+
+        logo = ctk.CTkLabel(
+            self.sidebar,
+            text="VisionX",
             font=("Arial",35,"bold")
         )
 
-
-        title.pack(
+        logo.pack(
             pady=30
         )
 
 
+        subtitle = ctk.CTkLabel(
+            self.sidebar,
+            text="AI Campus System"
+        )
+
+        subtitle.pack()
+
+
+
+        menu_items = [
+
+            ("🏠 Dashboard", self.show_dashboard),
+
+            ("👨‍🎓 Students", self.open_students),
+
+            ("📷 Attendance", None),
+
+            ("🛡 Security", None),
+
+            ("🎤 Voice Assistant", None),
+
+            ("✋ Gesture Control", None),
+
+            ("📊 Reports", None),
+
+            ("⚙ Settings", None)
+
+        ]
+
+
+        for name, command in menu_items:
+
+
+            button = ctk.CTkButton(
+
+                self.sidebar,
+
+                text=name,
+
+                width=190,
+
+                height=40,
+
+                command=command
+
+            )
+
+
+            button.pack(
+                pady=8
+            )
+
+
+
+        # User section
+
+        user = ctk.CTkLabel(
+
+            self.sidebar,
+
+            text=f"Logged as\n{self.role}",
+
+            font=("Arial",15)
+
+        )
+
+
+        user.pack(
+            side="bottom",
+            pady=20
+        )
+
+
+
+    # ---------------- CLEAR CONTENT ----------------
+
+
+    def clear_content(self):
+
+        for widget in self.content.winfo_children():
+
+            widget.destroy()
+
+
+
+    # ---------------- DASHBOARD HOME ----------------
+
+
+    def show_dashboard(self):
+
+
+        self.clear_content()
+
+
+
+        title = ctk.CTkLabel(
+
+            self.content,
+
+            text=f"Welcome, {self.role}",
+
+            font=("Arial",32,"bold")
+
+        )
+
+        title.pack(
+            pady=20
+        )
+
+
+
+        clock = ctk.CTkLabel(
+
+            self.content,
+
+            text=datetime.now().strftime(
+                "%Y-%m-%d %H:%M:%S"
+            ),
+
+            font=("Arial",16)
+
+        )
+
+        clock.pack()
+
+
 
         cards_frame = ctk.CTkFrame(
-            self.main_area
+            self.content
         )
 
         cards_frame.pack(
-            pady=20
+            pady=40
         )
 
 
 
         cards = [
 
-            ("Students","0"),
-            ("Attendance","0%"),
-            ("Security Alerts","0"),
-            ("Visitors","0")
+            ("👨‍🎓 Students","125"),
+
+            ("📷 Attendance","96%"),
+
+            ("🛡 Alerts","3"),
+
+            ("👥 Visitors","20")
 
         ]
 
 
-        for name,value in cards:
+
+        for title,value in cards:
 
 
             card = ctk.CTkFrame(
+
                 cards_frame,
+
                 width=180,
+
                 height=120
+
             )
+
 
             card.pack(
                 side="left",
@@ -153,21 +251,61 @@ class Dashboard:
             )
 
 
-            label1 = ctk.CTkLabel(
-                card,
-                text=name,
-                font=("Arial",18)
-            )
+            card.pack_propagate(False)
 
-            label1.pack(
+
+
+            ctk.CTkLabel(
+
+                card,
+
+                text=title,
+
+                font=("Arial",18)
+
+            ).pack(
                 pady=15
             )
 
 
-            label2 = ctk.CTkLabel(
-                card,
-                text=value,
-                font=("Arial",30,"bold")
-            )
 
-            label2.pack()
+            ctk.CTkLabel(
+
+                card,
+
+                text=value,
+
+                font=("Arial",30,"bold")
+
+            ).pack()
+
+
+
+        status = ctk.CTkLabel(
+
+            self.content,
+
+            text="System Status : ONLINE ✅",
+
+            font=("Arial",20)
+
+        )
+
+        status.pack(
+            pady=30
+        )
+
+
+
+
+    # ---------------- STUDENT PAGE ----------------
+
+
+    def open_students(self):
+
+        self.clear_content()
+
+
+        StudentsPage(
+            self.content
+        )
