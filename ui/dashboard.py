@@ -25,12 +25,10 @@ class Dashboard:
 
 
 
-    # ---------------- MAIN LAYOUT ----------------
+    # MAIN LAYOUT
 
     def create_layout(self):
 
-
-        # Sidebar
 
         self.sidebar = ctk.CTkFrame(
             self.app,
@@ -43,8 +41,6 @@ class Dashboard:
             fill="y"
         )
 
-
-        # Content Area
 
         self.content = ctk.CTkFrame(
             self.app
@@ -63,8 +59,7 @@ class Dashboard:
 
 
 
-    # ---------------- SIDEBAR ----------------
-
+    # SIDEBAR
 
     def create_sidebar(self):
 
@@ -113,7 +108,7 @@ class Dashboard:
         for name, command in menu_items:
 
 
-            button = ctk.CTkButton(
+            btn = ctk.CTkButton(
 
                 self.sidebar,
 
@@ -128,22 +123,16 @@ class Dashboard:
             )
 
 
-            button.pack(
+            btn.pack(
                 pady=8
             )
 
 
 
-        # User section
-
         user = ctk.CTkLabel(
-
             self.sidebar,
-
             text=f"Logged as\n{self.role}",
-
             font=("Arial",15)
-
         )
 
 
@@ -154,8 +143,7 @@ class Dashboard:
 
 
 
-    # ---------------- CLEAR CONTENT ----------------
-
+    # CLEAR CONTENT
 
     def clear_content(self):
 
@@ -165,8 +153,7 @@ class Dashboard:
 
 
 
-    # ---------------- DASHBOARD HOME ----------------
-
+    # DASHBOARD HOME
 
     def show_dashboard(self):
 
@@ -174,12 +161,11 @@ class Dashboard:
         self.clear_content()
 
 
-
         title = ctk.CTkLabel(
 
             self.content,
 
-            text=f"Welcome, {self.role}",
+            text=f"Welcome {self.role}",
 
             font=("Arial",32,"bold")
 
@@ -190,8 +176,7 @@ class Dashboard:
         )
 
 
-
-        clock = ctk.CTkLabel(
+        time = ctk.CTkLabel(
 
             self.content,
 
@@ -199,11 +184,12 @@ class Dashboard:
                 "%Y-%m-%d %H:%M:%S"
             ),
 
-            font=("Arial",16)
+            font=("Arial",18)
 
         )
 
-        clock.pack()
+
+        time.pack()
 
 
 
@@ -214,7 +200,6 @@ class Dashboard:
         cards_frame.pack(
             pady=40
         )
-
 
 
         cards = [
@@ -256,13 +241,9 @@ class Dashboard:
 
 
             ctk.CTkLabel(
-
                 card,
-
                 text=title,
-
                 font=("Arial",18)
-
             ).pack(
                 pady=15
             )
@@ -270,13 +251,9 @@ class Dashboard:
 
 
             ctk.CTkLabel(
-
                 card,
-
                 text=value,
-
                 font=("Arial",30,"bold")
-
             ).pack()
 
 
@@ -291,20 +268,18 @@ class Dashboard:
 
         )
 
+
         status.pack(
             pady=30
         )
 
 
 
-
-    # ---------------- STUDENT PAGE ----------------
-
+    # STUDENT PAGE
 
     def open_students(self):
 
         self.clear_content()
-
 
         StudentsPage(
             self.content

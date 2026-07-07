@@ -191,9 +191,8 @@ def delete_student(student_id):
     cursor.execute(
         """
         DELETE FROM students
-        WHERE id=?
+        WHERE student_id=?
         """,
-
         (student_id,)
     )
 
@@ -201,3 +200,32 @@ def delete_student(student_id):
     conn.commit()
 
     conn.close()
+    
+def search_students(keyword):
+
+    conn = create_connection()
+
+    cursor = conn.cursor()
+
+
+    cursor.execute(
+        """
+        SELECT * FROM students
+        WHERE student_id LIKE ?
+        OR name LIKE ?
+        """,
+
+        (
+            "%" + keyword + "%",
+            "%" + keyword + "%"
+        )
+    )
+
+
+    result = cursor.fetchall()
+
+
+    conn.close()
+
+
+    return result

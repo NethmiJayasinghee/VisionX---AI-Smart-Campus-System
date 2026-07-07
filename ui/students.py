@@ -2,7 +2,9 @@ import customtkinter as ctk
 
 from database.database import (
     add_student,
-    get_students
+    get_students,
+    search_students,
+    delete_student
 )
 
 
@@ -33,7 +35,8 @@ class StudentsPage:
 
 
 
-        # Student ID
+        # ---------------- FORM ----------------
+
 
         self.student_id = ctk.CTkEntry(
             self.parent,
@@ -47,8 +50,6 @@ class StudentsPage:
 
 
 
-        # Name
-
         self.name = ctk.CTkEntry(
             self.parent,
             placeholder_text="Student Name",
@@ -61,8 +62,6 @@ class StudentsPage:
 
 
 
-        # Email
-
         self.email = ctk.CTkEntry(
             self.parent,
             placeholder_text="Email",
@@ -74,8 +73,6 @@ class StudentsPage:
         )
 
 
-
-        # Course
 
         self.course = ctk.CTkEntry(
             self.parent,
@@ -92,7 +89,7 @@ class StudentsPage:
         add_btn = ctk.CTkButton(
             self.parent,
             text="Add Student",
-            command=self.add
+            command=self.add_student
         )
 
         add_btn.pack(
@@ -101,12 +98,60 @@ class StudentsPage:
 
 
 
-        # Student List
+        # ---------------- SEARCH ----------------
+
+
+        self.search_box = ctk.CTkEntry(
+            self.parent,
+            placeholder_text="Search by ID or Name",
+            width=300
+        )
+
+        self.search_box.pack(
+            pady=5
+        )
+
+
+
+        search_btn = ctk.CTkButton(
+            self.parent,
+            text="Search",
+            command=self.search
+        )
+
+        search_btn.pack(
+            pady=5
+        )
+
+
+
+        # ---------------- DELETE ----------------
+
+
+        delete_btn = ctk.CTkButton(
+            self.parent,
+            text="Delete Student",
+            fg_color="red",
+            command=self.delete
+        )
+
+        delete_btn.pack(
+            pady=5
+        )
+
+
+
+        # ---------------- DISPLAY ----------------
+
 
         self.listbox = ctk.CTkTextbox(
+
             self.parent,
+
             width=700,
+
             height=250
+
         )
 
         self.listbox.pack(
@@ -115,23 +160,28 @@ class StudentsPage:
 
 
 
-        view_btn = ctk.CTkButton(
+        refresh_btn = ctk.CTkButton(
+
             self.parent,
-            text="Refresh Students",
-            command=self.view
+
+            text="Refresh",
+
+            command=self.load_students
+
         )
 
-        view_btn.pack()
+        refresh_btn.pack()
 
 
 
-        self.view()
+        self.load_students()
 
 
 
-    # Add Student
+    # ---------------- ADD ----------------
 
-    def add(self):
+
+    def add_student(self):
 
 
         add_student(
@@ -149,15 +199,16 @@ class StudentsPage:
         )
 
 
-        self.clear_fields()
+        self.clear()
 
-        self.view()
+        self.load_students()
 
 
 
-    # Display Students
+    # ---------------- LOAD ----------------
 
-    def view(self):
+
+    def load_students(self):
 
 
         self.listbox.delete(
@@ -167,6 +218,7 @@ class StudentsPage:
 
 
         students = get_students()
+
 
 
         for student in students:
@@ -182,6 +234,45 @@ Name       : {student[2]}
 Email      : {student[3]}
 Course     : {student[4]}
 
+----------------------------
+
+"""
+
+            )
+
+
+
+    # ---------------- SEARCH ----------------
+
+
+    def search(self):
+
+
+        keyword = self.search_box.get()
+
+
+        self.listbox.delete(
+            "0.0",
+            "end"
+        )
+
+
+        students = search_students(keyword)
+
+
+
+        for student in students:
+
+
+            self.listbox.insert(
+
+                "end",
+
+                f"""
+Student ID : {student[1]}
+Name       : {student[2]}
+Email      : {student[3]}
+Course     : {student[4]}
 
 ----------------------------
 
@@ -191,22 +282,45 @@ Course     : {student[4]}
 
 
 
-    def clear_fields(self):
+    # ---------------- DELETE ----------------
+
+
+    def delete(self):
+
+
+        student_id = self.student_id.get()
+
+
+        delete_student(student_id)
+
+
+        self.load_students()
+
+
+
+    # ---------------- CLEAR ----------------
+
+
+    def clear(self):
+
 
         self.student_id.delete(
             0,
             "end"
         )
 
+
         self.name.delete(
             0,
             "end"
         )
 
+
         self.email.delete(
             0,
             "end"
         )
+
 
         self.course.delete(
             0,
