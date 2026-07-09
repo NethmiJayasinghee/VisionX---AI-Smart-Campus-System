@@ -2,6 +2,7 @@ import customtkinter as ctk
 
 
 from database.database import (
+    create_attendance_table,
     create_tables,
     insert_default_users,
     create_student_table
@@ -24,6 +25,9 @@ insert_default_users()
 
 # Create student table
 create_student_table()
+
+# Create attendance table
+create_attendance_table()
 
 
 

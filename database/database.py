@@ -1,5 +1,6 @@
 import sqlite3
 
+from datetime import datetime
 
 DATABASE_NAME = "campus.db"
 
@@ -229,3 +230,78 @@ def search_students(keyword):
 
 
     return result
+
+def create_attendance_table():
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS attendance(
+
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+        student_id TEXT,
+
+        student_name TEXT,
+
+        date TEXT,
+
+        time TEXT,
+
+        status TEXT
+
+    )
+    """)
+
+    conn.commit()
+    conn.close()
+
+    
+
+
+def mark_attendance(student_id, student_name):
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    now = datetime.now()
+
+    today = now.strftime("%Y-%m-%d")
+    current_time = now.strftime("%H:%M:%S")
+
+    cursor.execute(
+        """
+        INSERT INTO attendance
+        (student_id, student_name, date, time, status)
+
+        VALUES(?,?,?,?,?)
+        """,
+        (
+            student_id,
+            student_name,
+            today,
+            current_time,
+            "Present"
+        )
+    )
+
+    conn.commit()
+    conn.close()
+
+def get_attendance():
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    SELECT *
+    FROM attendance
+    ORDER BY id DESC
+    """)
+
+    data = cursor.fetchall()
+
+    conn.close()
+
+    return data
