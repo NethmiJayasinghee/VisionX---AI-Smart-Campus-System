@@ -116,19 +116,19 @@ def create_student_table():
 
         course TEXT,
 
-        photo TEXT
+        photo TEXT,
+
+        face_encoding TEXT
 
     )
     """)
 
 
     conn.commit()
-
     conn.close()
 
 
-
-def add_student(student_id, name, email, course, photo):
+def add_student(student_id, name, email, course, photo, face_encoding):
 
     conn = create_connection()
 
@@ -138,9 +138,9 @@ def add_student(student_id, name, email, course, photo):
     cursor.execute(
         """
         INSERT INTO students
-        (student_id,name,email,course,photo)
+        (student_id,name,email,course,photo,face_encoding)
 
-        VALUES(?,?,?,?,?)
+        VALUES(?,?,?,?,?,?)
         """,
 
         (
@@ -148,7 +148,8 @@ def add_student(student_id, name, email, course, photo):
             name,
             email,
             course,
-            photo
+            photo,
+            face_encoding
         )
     )
 
@@ -156,7 +157,6 @@ def add_student(student_id, name, email, course, photo):
     conn.commit()
 
     conn.close()
-
 
 
 def get_students():
@@ -200,7 +200,7 @@ def delete_student(student_id):
     conn.commit()
 
     conn.close()
-    
+
 def search_students(keyword):
 
     conn = create_connection()
