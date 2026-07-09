@@ -2,37 +2,77 @@ import sqlite3
 
 from datetime import datetime
 
+
 DATABASE_NAME = "campus.db"
 
 
+
 def create_connection():
-    connection = sqlite3.connect(DATABASE_NAME)
+
+    connection = sqlite3.connect(
+        DATABASE_NAME
+    )
+
     return connection
+
 
 
 
 def create_tables():
 
     conn = create_connection()
+
     cursor = conn.cursor()
 
 
+
+    # Students table
+
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS users(
+    CREATE TABLE IF NOT EXISTS students(
 
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT NOT NULL,
-        password TEXT NOT NULL,
-        role TEXT NOT NULL
+
+        student_id TEXT,
+
+        name TEXT,
+
+        email TEXT,
+
+        course TEXT,
+
+        photo TEXT,
+
+        face_encoding TEXT
 
     )
     """)
 
 
+
+    # Attendance table 
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS attendance(
+
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+        student_id TEXT,
+
+        name TEXT,
+
+        date TEXT,
+
+        time TEXT
+
+    )
+    """)
+
+
+
     conn.commit()
+
     conn.close()
-
-
 
 def insert_default_users():
 
@@ -160,23 +200,41 @@ def add_student(student_id, name, email, course, photo, face_encoding):
     conn.close()
 
 
+# def get_students():
+
+#     conn = create_connection()
+
+#     cursor = conn.cursor()
+
+
+#     cursor.execute(
+#         "SELECT * FROM students"
+#     )
+
+
+#     data = cursor.fetchall()
+
+
+#     conn.close()
+
+
+#     return data
+
 def get_students():
 
     conn = create_connection()
 
     cursor = conn.cursor()
 
-
     cursor.execute(
         "SELECT * FROM students"
     )
 
-
     data = cursor.fetchall()
 
+    print(data)   # add this
 
     conn.close()
-
 
     return data
 

@@ -13,6 +13,7 @@ from ui.login import LoginPage
 
 
 
+
 # ---------------- DATABASE INITIALIZATION ----------------
 
 # Create users table
