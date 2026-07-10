@@ -301,7 +301,15 @@ def start_face_recognition():
             )
 
 
-
+            cv2.putText(
+                frame,
+                "Press Q to Exit",
+                (50,100),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.7,
+                (0,0,255),
+                2
+            )
 
         except Exception as e:
 
