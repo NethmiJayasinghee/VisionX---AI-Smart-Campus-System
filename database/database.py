@@ -333,31 +333,31 @@ def search_students(keyword):
 
     return result
 
-# def create_attendance_table():
+def create_attendance_table():
 
-#     conn = create_connection()
-#     cursor = conn.cursor()
+    conn = create_connection()
+    cursor = conn.cursor()
 
-#     cursor.execute("""
-#     CREATE TABLE IF NOT EXISTS attendance(
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS attendance(
 
-#         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-#         student_id TEXT,
+        student_id TEXT,
 
-#         student_name TEXT,
+        student_name TEXT,
 
-#         date TEXT,
+        date TEXT,
 
-#         time TEXT,
+        time TEXT,
 
-#         status TEXT
+        status TEXT
 
-#     )
-#     """)
+    )
+    """)
 
-#     conn.commit()
-#     conn.close()
+    conn.commit()
+    conn.close()
 
     
 
