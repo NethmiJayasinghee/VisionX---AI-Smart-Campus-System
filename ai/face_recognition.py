@@ -2,6 +2,8 @@ import cv2
 import json
 import numpy as np
 
+from tkinter import messagebox
+
 from deepface import DeepFace
 
 from database.database import (
@@ -82,7 +84,7 @@ def calculate_distance(
 
 
 
-# ---------------- COMPARE FACES ----------------
+# ---------------- FIND BEST MATCH ----------------
 
 
 def find_best_match(
@@ -130,7 +132,7 @@ def find_best_match(
 
 
 
-    # Threshold
+    # Face match threshold
 
     if lowest_distance < 10:
 
@@ -248,7 +250,8 @@ def start_face_recognition():
 
 
 
-            # Attendance save once
+            # ---------------- MARK ATTENDANCE ----------------
+
 
             if student_id is not None:
 
@@ -280,6 +283,26 @@ def start_face_recognition():
                     )
 
 
+                    # Popup Message
+
+                    messagebox.showinfo(
+
+                        "VisionX Attendance",
+
+                        f"Attendance Marked Successfully!\n\n"
+                        f"Student : {name}\n"
+                        f"Distance : {distance:.2f}"
+
+                    )
+
+
+                    # Close camera after attendance
+
+                    break
+
+
+
+
 
 
             cv2.putText(
@@ -302,14 +325,24 @@ def start_face_recognition():
 
 
             cv2.putText(
+
                 frame,
+
                 "Press Q to Exit",
+
                 (50,100),
+
                 cv2.FONT_HERSHEY_SIMPLEX,
+
                 0.7,
+
                 (0,0,255),
+
                 2
+
             )
+
+
 
         except Exception as e:
 
@@ -317,6 +350,7 @@ def start_face_recognition():
             print(
 
                 "Recognition Error:",
+
                 e
 
             )
