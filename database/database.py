@@ -121,6 +121,20 @@ def create_tables():
     )
     """)
 
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS users(
+
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+        username TEXT,
+
+        password TEXT,
+
+        role TEXT
+
+    )
+    """)
+
     conn.commit()
     conn.close()
 
