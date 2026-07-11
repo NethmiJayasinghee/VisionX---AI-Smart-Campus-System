@@ -66,7 +66,7 @@ class AttendancePage:
 
         self.listbox.insert(
             "end",
-            "-" * 70 + "\n"
+            "-" * 100 + "\n"
         )
 
         for row in data:
