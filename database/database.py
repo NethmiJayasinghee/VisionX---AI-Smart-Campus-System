@@ -18,15 +18,68 @@ def create_connection():
 
 
 
+# def create_tables():
+
+#     conn = create_connection()
+
+#     cursor = conn.cursor()
+
+
+
+#     # Students table
+
+#     cursor.execute("""
+#     CREATE TABLE IF NOT EXISTS students(
+
+#         id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+#         student_id TEXT,
+
+#         name TEXT,
+
+#         email TEXT,
+
+#         course TEXT,
+
+#         photo TEXT,
+
+#         face_encoding TEXT
+
+#     )
+#     """)
+
+
+
+#     # Attendance table 
+
+#     cursor.execute("""
+#     CREATE TABLE IF NOT EXISTS attendance(
+
+#     id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+#     student_id TEXT NOT NULL,
+
+#     name TEXT NOT NULL,
+
+#     date TEXT NOT NULL,
+
+#     time TEXT NOT NULL
+
+# )
+# """)
+
+
+
+#     conn.commit()
+
+#     conn.close()
+
 def create_tables():
 
     conn = create_connection()
-
     cursor = conn.cursor()
 
-
-
-    # Students table
+    # ---------------- Students ----------------
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS students(
@@ -48,30 +101,27 @@ def create_tables():
     )
     """)
 
-
-
-    # Attendance table 
+    # ---------------- Attendance ----------------
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS attendance(
 
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-    student_id TEXT NOT NULL,
+        student_id TEXT,
 
-    name TEXT NOT NULL,
+        student_name TEXT,
 
-    date TEXT NOT NULL,
+        date TEXT,
 
-    time TEXT NOT NULL
+        time TEXT,
 
-)
-""")
+        status TEXT
 
-
+    )
+    """)
 
     conn.commit()
-
     conn.close()
 
 def insert_default_users():
@@ -200,26 +250,6 @@ def add_student(student_id, name, email, course, photo, face_encoding):
     conn.close()
 
 
-# def get_students():
-
-#     conn = create_connection()
-
-#     cursor = conn.cursor()
-
-
-#     cursor.execute(
-#         "SELECT * FROM students"
-#     )
-
-
-#     data = cursor.fetchall()
-
-
-#     conn.close()
-
-
-#     return data
-
 def get_students():
 
     conn = create_connection()
@@ -289,34 +319,80 @@ def search_students(keyword):
 
     return result
 
-def create_attendance_table():
+# def create_attendance_table():
 
-    conn = create_connection()
-    cursor = conn.cursor()
+#     conn = create_connection()
+#     cursor = conn.cursor()
 
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS attendance(
+#     cursor.execute("""
+#     CREATE TABLE IF NOT EXISTS attendance(
 
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+#         id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-        student_id TEXT,
+#         student_id TEXT,
 
-        student_name TEXT,
+#         student_name TEXT,
 
-        date TEXT,
+#         date TEXT,
 
-        time TEXT,
+#         time TEXT,
 
-        status TEXT
+#         status TEXT
 
-    )
-    """)
+#     )
+#     """)
 
-    conn.commit()
-    conn.close()
+#     conn.commit()
+#     conn.close()
 
     
 
+
+# def mark_attendance(student_id, student_name):
+
+#     conn = create_connection()
+#     cursor = conn.cursor()
+
+#     now = datetime.now()
+
+#     today = now.strftime("%Y-%m-%d")
+#     current_time = now.strftime("%H:%M:%S")
+
+#     cursor.execute(
+#         """
+#         INSERT INTO attendance
+#         (student_id, student_name, date, time, status)
+
+#         VALUES(?,?,?,?,?)
+#         """,
+#         (
+#             student_id,
+#             student_name,
+#             today,
+#             current_time,
+#             "Present"
+#         )
+#     )
+
+#     conn.commit()
+#     conn.close()
+
+# def get_attendance():
+
+#     conn = create_connection()
+#     cursor = conn.cursor()
+
+#     cursor.execute("""
+#     SELECT *
+#     FROM attendance
+#     ORDER BY id DESC
+#     """)
+
+#     data = cursor.fetchall()
+
+#     conn.close()
+
+#     return data
 
 def mark_attendance(student_id, student_name):
 
@@ -328,38 +404,36 @@ def mark_attendance(student_id, student_name):
     today = now.strftime("%Y-%m-%d")
     current_time = now.strftime("%H:%M:%S")
 
-    cursor.execute(
-        """
-        INSERT INTO attendance
-        (student_id, student_name, date, time, status)
+    # Prevent duplicate attendance for the same day
+    cursor.execute("""
+        SELECT id
+        FROM attendance
+        WHERE student_id = ?
+        AND date = ?
+    """, (student_id, today))
 
-        VALUES(?,?,?,?,?)
-        """,
+    if cursor.fetchone():
+        conn.close()
+        return
+
+    cursor.execute("""
+        INSERT INTO attendance
         (
             student_id,
             student_name,
-            today,
-            current_time,
-            "Present"
+            date,
+            time,
+            status
         )
-    )
+        VALUES (?,?,?,?,?)
+    """,
+    (
+        student_id,
+        student_name,
+        today,
+        current_time,
+        "Present"
+    ))
 
     conn.commit()
     conn.close()
-
-def get_attendance():
-
-    conn = create_connection()
-    cursor = conn.cursor()
-
-    cursor.execute("""
-    SELECT *
-    FROM attendance
-    ORDER BY id DESC
-    """)
-
-    data = cursor.fetchall()
-
-    conn.close()
-
-    return data
