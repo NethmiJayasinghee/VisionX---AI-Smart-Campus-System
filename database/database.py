@@ -55,18 +55,18 @@ def create_tables():
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS attendance(
 
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-        student_id TEXT,
+    student_id TEXT NOT NULL,
 
-        name TEXT,
+    name TEXT NOT NULL,
 
-        date TEXT,
+    date TEXT NOT NULL,
 
-        time TEXT
+    time TEXT NOT NULL
 
-    )
-    """)
+)
+""")
 
 
 
