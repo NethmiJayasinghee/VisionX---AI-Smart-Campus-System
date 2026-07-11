@@ -1,9 +1,8 @@
 import customtkinter as ctk
 from datetime import datetime
-
 from ui.students import StudentsPage
-
-
+from ui.attendance import AttendancePage
+from ai.face_recognition import start_face_recognition
 
 class Dashboard:
 
@@ -90,7 +89,7 @@ class Dashboard:
 
             ("👨‍🎓 Students", self.open_students),
 
-            ("📷 Attendance", None),
+            ("📷 Attendance", self.open_attendance),
 
             ("🛡 Security", None),
 
@@ -284,3 +283,10 @@ class Dashboard:
         StudentsPage(
             self.content
         )
+
+
+    def open_attendance(self):
+
+        self.clear_content()
+
+        AttendancePage(self.content)

@@ -15,64 +15,48 @@ def create_connection():
 
     return connection
 
+def get_total_students():
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT COUNT(*) FROM students"
+    )
+
+    count = cursor.fetchone()[0]
+
+    conn.close()
+
+    return count
 
 
 
-# def create_tables():
+def get_today_attendance():
 
-#     conn = create_connection()
-
-#     cursor = conn.cursor()
-
+    conn = create_connection()
+    cursor = conn.cursor()
 
 
-#     # Students table
-
-#     cursor.execute("""
-#     CREATE TABLE IF NOT EXISTS students(
-
-#         id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-#         student_id TEXT,
-
-#         name TEXT,
-
-#         email TEXT,
-
-#         course TEXT,
-
-#         photo TEXT,
-
-#         face_encoding TEXT
-
-#     )
-#     """)
+    today = datetime.now().strftime("%Y-%m-%d")
 
 
-
-#     # Attendance table 
-
-#     cursor.execute("""
-#     CREATE TABLE IF NOT EXISTS attendance(
-
-#     id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-#     student_id TEXT NOT NULL,
-
-#     name TEXT NOT NULL,
-
-#     date TEXT NOT NULL,
-
-#     time TEXT NOT NULL
-
-# )
-# """)
+    cursor.execute(
+        """
+        SELECT COUNT(*)
+        FROM attendance
+        WHERE date=?
+        """,
+        (today,)
+    )
 
 
+    count = cursor.fetchone()[0]
 
-#     conn.commit()
 
-#     conn.close()
+    conn.close()
+
+    return count
 
 def create_tables():
 
@@ -391,22 +375,22 @@ def create_attendance_table():
 #     conn.commit()
 #     conn.close()
 
-# def get_attendance():
+def get_attendance():
 
-#     conn = create_connection()
-#     cursor = conn.cursor()
+    conn = create_connection()
+    cursor = conn.cursor()
 
-#     cursor.execute("""
-#     SELECT *
-#     FROM attendance
-#     ORDER BY id DESC
-#     """)
+    cursor.execute("""
+    SELECT *
+    FROM attendance
+    ORDER BY id DESC
+    """)
 
-#     data = cursor.fetchall()
+    data = cursor.fetchall()
 
-#     conn.close()
+    conn.close()
 
-#     return data
+    return data
 
 def mark_attendance(student_id, student_name):
 
